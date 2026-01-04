@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Student</title>
+</head>
+<body>
+
+<h2>Add Student</h2>
+
+<form id="studentForm">
+    <input type="text" placeholder="Roll No" id="rollNo" required><br>
+    <input type="text" placeholder="Name" id="name" required><br>
+    <input type="password" placeholder="Password" id="password" required><br>
+
+    <select id="standard" required>
+        <option value="">Select Class</option>
+        <option value="1">Std 1</option>
+        <option value="2">Std 2</option>
+        <option value="3">Std 3</option>
+        <option value="4">Std 4</option>
+    </select><br><br>
+
+    <button type="submit">Create Student</button>
+</form>
+
+<p id="msg"></p>
+
+<script>
+    document.getElementById("studentForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const res = await fetch("/api/teacher/students", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                rollNo: rollNo.value,
+                name: name.value,
+                password: password.value,
+                standard: standard.value
+            })
+        });
+
+        document.getElementById("msg").innerText = await res.text();
+    });
+</script>
+
+</body>
+</html>

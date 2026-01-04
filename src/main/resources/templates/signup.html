@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Signup</title>
+</head>
+<body>
+
+<h2>Teacher Signup</h2>
+
+<form id="signupForm">
+    <input type="text" placeholder="Name" id="name" required><br>
+    <input type="email" placeholder="Email" id="email" required><br>
+    <input type="password" placeholder="Password" id="password" required><br>
+    <button type="submit">Signup</button>
+</form>
+
+<p id="msg"></p>
+
+<script>
+    document.getElementById("signupForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const res = await fetch("/api/auth/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: name.value,
+                email: email.value,
+                password: password.value
+            })
+        });
+
+        document.getElementById("msg").innerText = await res.text();
+    });
+</script>
+
+</body>
+</html>
