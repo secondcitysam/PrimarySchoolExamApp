@@ -2,19 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-<h2>Teacher Dashboard</h2>
+<div class="card">
+    <h2>Teacher Dashboard</h2>
 
-<ul>
-    <li><a href="/teacher/students/add">Add Student</a></li>
-    <!-- later: topics, tests -->
-</ul>
+    <button onclick="location.href='/teacher/students/add'">
+        ➕ Add Student
+    </button>
 
-<form action="/api/auth/logout" method="post">
-    <button type="submit">Logout</button>
-</form>
+    <form action="/api/auth/logout" method="post" style="margin-top:16px;">
+        <button style="background:#ef4444">Logout</button>
+    </form>
+</div>
 
 </body>
 </html>

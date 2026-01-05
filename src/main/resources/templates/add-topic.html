@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Topic</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="card">
+    <h2>Add Topic</h2>
+
+    <form id="f">
+        <input id="name" placeholder="Topic Name" required>
+        <input id="desc" placeholder="Short Description">
+        <button>Add Topic</button>
+    </form>
+</div>
+
+<script>
+    const f = document.getElementById("f");
+
+    f.onsubmit = async e => {
+        e.preventDefault();
+
+        await fetch('/api/teacher/topics', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                name: name.value,
+                description: desc.value
+            })
+        });
+
+        location.href = '/teacher/topics';
+    };
+</script>
+
+</body>
+</html>

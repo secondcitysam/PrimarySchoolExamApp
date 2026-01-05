@@ -2,28 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Add Student</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
-<h2>Add Student</h2>
+<div class="card">
+    <h2>Add Student</h2>
 
-<form id="studentForm">
-    <input type="text" placeholder="Roll No" id="rollNo" required><br>
-    <input type="text" placeholder="Name" id="name" required><br>
-    <input type="password" placeholder="Password" id="password" required><br>
+    <form id="studentForm">
+        <input type="text" id="rollNo" placeholder="Roll Number" required>
+        <input type="text" id="studentName" placeholder="Student Name" required>
+        <input type="password" id="password" placeholder="Password" required>
 
-    <select id="standard" required>
-        <option value="">Select Class</option>
-        <option value="1">Std 1</option>
-        <option value="2">Std 2</option>
-        <option value="3">Std 3</option>
-        <option value="4">Std 4</option>
-    </select><br><br>
+        <select id="standard" required>
+            <option value="">Select Class</option>
+            <option value="1">Std 1</option>
+            <option value="2">Std 2</option>
+            <option value="3">Std 3</option>
+            <option value="4">Std 4</option>
+        </select>
 
-    <button type="submit">Create Student</button>
-</form>
+        <button type="submit">Create Student</button>
+    </form>
 
-<p id="msg"></p>
+    <p id="msg" class="success"></p>
+</div>
 
 <script>
     document.getElementById("studentForm").addEventListener("submit", async e => {
@@ -33,10 +36,10 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                rollNo: rollNo.value,
-                name: name.value,
-                password: password.value,
-                standard: standard.value
+                rollNo: document.getElementById("rollNo").value,
+                name: document.getElementById("studentName").value,
+                password: document.getElementById("password").value,
+                standard: document.getElementById("standard").value
             })
         });
 

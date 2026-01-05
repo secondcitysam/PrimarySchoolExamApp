@@ -52,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String studentLogin(String rollNo, String password) {
+
         Student student = studentRepository.findByRollNo(rollNo)
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
@@ -60,6 +61,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return jwtUtil.generateToken(student.getRollNo(), "STUDENT");
-
     }
+
 }

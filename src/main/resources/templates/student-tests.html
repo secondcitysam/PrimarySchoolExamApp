@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Available Tests</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="card">
+    <h2>Available Tests</h2>
+
+    <ul style="list-style:none; padding:0; margin:0;">
+        <li th:each="t : ${tests}"
+            style="padding:12px 0; border-bottom:1px solid #e5e7eb;">
+            <strong th:text="${t.title}"></strong><br>
+            <span style="font-size:14px; color:#6b7280;"
+                  th:text="${t.durationMinutes} + ' minutes'"></span>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

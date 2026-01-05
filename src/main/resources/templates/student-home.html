@@ -2,18 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Student Home</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
-<h2>Welcome Student</h2>
+<div class="card">
+    <h2>Welcome 👋</h2>
 
-<p>
-    Your class tests will appear here.
-</p>
+    <p style="text-align:center; font-size:15px; color:#475467;">
+        Your assigned tests will appear here.
+    </p>
 
-<form action="/api/auth/logout" method="post">
-    <button type="submit">Logout</button>
-</form>
+    <form action="/api/auth/logout" method="post" style="margin-top:20px;">
+        <button style="background:#ef4444">Logout</button>
+    </form>
+</div>
 
 </body>
 </html>

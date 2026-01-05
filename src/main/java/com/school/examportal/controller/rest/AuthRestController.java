@@ -1,5 +1,6 @@
 package com.school.examportal.controller.rest;
 
+import com.school.examportal.dto.StudentLoginRequest;
 import com.school.examportal.dto.TeacherLoginRequest;
 import com.school.examportal.dto.TeacherSignupRequest;
 import com.school.examportal.service.AuthService;
@@ -55,6 +56,27 @@ public class AuthRestController {
 
         return ResponseEntity.ok("Logged out");
     }
+
+    @PostMapping("/student-login")
+    public ResponseEntity<?> studentLogin(
+            @RequestBody StudentLoginRequest request,
+            HttpServletResponse response
+    ) {
+        String token = authService.studentLogin(
+                request.getRollNo(),
+                request.getPassword()
+        );
+
+        Cookie cookie = new Cookie("JWT", token);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(24 * 60 * 60);
+
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Student login successful");
+    }
+
 
 
 }
