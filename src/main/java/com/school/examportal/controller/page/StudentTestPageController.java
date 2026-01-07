@@ -11,13 +11,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class StudentTestPageController {
 
-    private final TestService service;
+    private final TestService testService;
 
     @GetMapping("/student/tests")
     public String tests(Authentication auth, Model model) {
-        // standard will come from Student later; for now assume stored
-        int standard = 2; // TEMP (replace in Version 4)
-        model.addAttribute("tests", service.studentVisible(standard));
+
+        // auth.getName() == rollNo (JWT subject)
+        String rollNo = auth.getName();
+
+        // TEMP: get standard from DB
+        // (you already have StudentRepository)
+        int standard = testService.getStudentStandard(rollNo);
+
+        model.addAttribute("tests",
+                testService.studentVisible(standard));
+
         return "student-tests";
     }
 }
+

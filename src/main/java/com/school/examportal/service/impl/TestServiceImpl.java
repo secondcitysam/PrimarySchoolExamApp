@@ -1,7 +1,11 @@
 package com.school.examportal.service.impl;
 
 import com.school.examportal.dto.TestCreateRequest;
-import com.school.examportal.entity.*;
+import com.school.examportal.entity.Student;
+import com.school.examportal.entity.Test;
+import com.school.examportal.entity.TestStatus;
+import com.school.examportal.entity.Topic;
+import com.school.examportal.repository.StudentRepository;
 import com.school.examportal.repository.TestRepository;
 import com.school.examportal.repository.TopicRepository;
 import com.school.examportal.service.TestService;
@@ -16,6 +20,7 @@ public class TestServiceImpl implements TestService {
 
     private final TestRepository testRepo;
     private final TopicRepository topicRepo;
+    private final StudentRepository studentRepo;
 
     @Override
     public void create(TestCreateRequest req) {
@@ -49,4 +54,14 @@ public class TestServiceImpl implements TestService {
     public List<Test> studentVisible(int standard) {
         return testRepo.findByStatusAndStandard(TestStatus.LIVE, standard);
     }
+
+    @Override
+    public int getStudentStandard(String rollNo) {
+
+        Student student = studentRepo.findByRollNo(rollNo)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        return student.getStandard();
+    }
+
 }

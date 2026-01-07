@@ -9,4 +9,7 @@ public interface TestService {
     void create(TestCreateRequest req);
     void makeLive(Long testId);
     List<Test> studentVisible(int standard);
+
+    int getStudentStandard(String rollNo);
+
 }

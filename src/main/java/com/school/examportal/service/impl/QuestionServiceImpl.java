@@ -16,6 +16,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final TestRepository testRepo;
     private final QuestionRepository questionRepo;
+    private final TestAttemptRepository attemptRepo;
+
 
     @Override
     public void addQuestion(QuestionCreateRequest req) {
@@ -52,4 +54,15 @@ public class QuestionServiceImpl implements QuestionService {
                 .orElseThrow(() -> new RuntimeException("Test not found"));
         return questionRepo.findByTestOrderByIdAsc(test);
     }
+    @Override
+    public List<Question> getQuestionsByAttempt(Long attemptId) {
+
+        TestAttempt attempt = attemptRepo.findById(attemptId)
+                .orElseThrow(() -> new RuntimeException("Attempt not found"));
+
+        Test test = attempt.getTest();
+
+        return questionRepo.findByTestOrderByIdAsc(test);
+    }
+
 }

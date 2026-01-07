@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Test Attempt</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<div class="card" style="max-width:700px;">
+    <h2>Test Attempt</h2>
+
+    <!-- Timer -->
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:16px;
+        font-size:14px;
+        color:#374151;
+    ">
+        <span>Answer carefully. You can navigate questions.</span>
+        <strong>⏱ Time left: <span id="time">--</span></strong>
+    </div>
+
+    <form id="attemptForm">
+
+        <!-- Questions -->
+        <div th:each="q, i : ${questions}"
+             class="question"
+             th:attr="data-index=${i.index}"
+             th:style="${i.index == 0} ? 'display:block' : 'display:none'">
+
+            <p style="font-weight:600; margin-bottom:10px;">
+                Q<span th:text="${i.index + 1}"></span>.
+                <span th:text="${q.text}"></span>
+            </p>
+
+            <div th:each="o : ${q.options}"
+                 style="
+                   padding:10px;
+                   border:1px solid #e5e7eb;
+                   border-radius:8px;
+                   margin-bottom:8px;
+                   cursor:pointer;
+                 ">
+                <label style="cursor:pointer;">
+                    <input type="radio"
+                           th:name="'q_' + ${q.id}"
+                           th:value="${o.id}"
+                           onchange="saveAnswer([[${q.id}]], this.value)">
+                    <span th:text="${o.text}" style="margin-left:8px;"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-top:20px;
+        ">
+            <button type="button"
+                    onclick="prev()"
+                    style="background:#9ca3af;">
+                Prev
+            </button>
+
+            <button type="button"
+                    onclick="next()">
+                Next
+            </button>
+        </div>
+
+        <!-- Submit -->
+        <div style="margin-top:24px; text-align:center;">
+            <button type="button"
+                    onclick="submitTest()"
+                    style="background:#dc2626;">
+                Submit Test
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    let index = 0;
+    const questions = document.querySelectorAll(".question");
+
+    function show(i) {
+        questions.forEach(q => q.style.display = "none");
+        questions[i].style.display = "block";
+    }
+
+    function next() {
+        if (index < questions.length - 1) {
+            index++;
+            show(index);
+        }
+    }
+
+    function prev() {
+        if (index > 0) {
+            index--;
+            show(index);
+        }
+    }
+
+    async function saveAnswer(questionId, optionId) {
+        await fetch("/api/student/answers", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                questionId,
+                optionId,
+                attemptId: [[${attemptId}]]
+            })
+        });
+    }
+
+    async function submitTest() {
+        const confirmSubmit = confirm("Are you sure you want to submit the test?");
+        if (!confirmSubmit) return;
+
+        await fetch("/api/student/attempts/[[${attemptId}]]/submit", {
+            method: "POST"
+        });
+
+        alert("Test submitted successfully.");
+        window.location.href = "/student/home";
+    }
+</script>
+
+</body>
+</html>
