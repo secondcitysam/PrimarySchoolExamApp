@@ -1,5 +1,7 @@
 package com.school.examportal.controller.rest;
 
+import com.school.examportal.dto.AnswerRequest;
+import com.school.examportal.service.AnswerService;
 import com.school.examportal.service.TestAttemptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

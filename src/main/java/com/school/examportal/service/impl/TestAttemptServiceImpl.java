@@ -1,9 +1,6 @@
 package com.school.examportal.service.impl;
 
-import com.school.examportal.entity.Student;
-import com.school.examportal.entity.Test;
-import com.school.examportal.entity.TestAttempt;
-import com.school.examportal.entity.TestStatus;
+import com.school.examportal.entity.*;
 import com.school.examportal.repository.StudentRepository;
 import com.school.examportal.repository.TestAttemptRepository;
 import com.school.examportal.repository.TestRepository;
@@ -61,13 +58,32 @@ public class TestAttemptServiceImpl implements TestAttemptService {
 
     @Override
     public void submitTest(Long attemptId) {
+
         TestAttempt attempt = attemptRepo.findById(attemptId)
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Attempt not found"));
 
         if (attempt.isSubmitted()) return;
 
+        int score = calculateScore(attempt);
+
+        attempt.setScore(score);
         attempt.setSubmitted(true);
         attempt.setSubmittedAt(LocalDateTime.now());
+
         attemptRepo.save(attempt);
     }
+
+
+    private int calculateScore(TestAttempt attempt) {
+
+        int score = 0;
+
+        for (Answer a : attempt.getAnswers()) {
+            if (a.getSelectedOption().isCorrect()) {
+                score += a.getQuestion().getMarks();
+            }
+        }
+        return score;
+    }
+
 }
