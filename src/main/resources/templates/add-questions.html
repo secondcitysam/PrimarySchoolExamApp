@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Questions</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
+
+<div class="page-content">
+    <div class="card" style="max-width:800px;">
+
+        <h2>Add Question</h2>
+
+        <form id="qForm">
+
+            <textarea id="questionText"
+                      placeholder="Enter question text"
+                      required
+                      style="
+                        width:100%;
+                        min-height:90px;
+                        padding:12px;
+                        border-radius:8px;
+                        border:1px solid #d0d5dd;
+                        font-size:14px;
+                        margin-bottom:14px;
+                      ">
+            </textarea>
+
+            <input id="marks"
+                   type="number"
+                   min="1"
+                   placeholder="Marks for this question"
+                   required
+                   style="margin-bottom:16px;">
+
+            <div style="font-weight:600; margin-bottom:10px;">
+                Options (select the correct one)
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <label style="display:flex; gap:10px;">
+                    <input type="radio" name="correct" value="0" required>
+                    <input id="opt0" placeholder="Option 1" required>
+                </label>
+
+                <label style="display:flex; gap:10px;">
+                    <input type="radio" name="correct" value="1">
+                    <input id="opt1" placeholder="Option 2" required>
+                </label>
+
+                <label style="display:flex; gap:10px;">
+                    <input type="radio" name="correct" value="2">
+                    <input id="opt2" placeholder="Option 3" required>
+                </label>
+
+                <label style="display:flex; gap:10px;">
+                    <input type="radio" name="correct" value="3">
+                    <input id="opt3" placeholder="Option 4" required>
+                </label>
+            </div>
+
+            <button type="submit" style="margin-top:18px;">
+                Save Question
+            </button>
+        </form>
+
+        <p id="msg" class="error"></p>
+
+        <hr style="margin:28px 0; border:none; border-top:1px solid #e5e7eb;">
+
+        <!-- 👉 Navigate to Preview -->
+        <a th:href="@{/teacher/tests/{id}/questions/preview(id=${testId})}"
+           style="font-weight:600;">
+            👀 Preview Questions
+        </a>
+
+    </div>
+</div>
+
+<script>
+    document.getElementById("qForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const correctIndex =
+            document.querySelector('input[name="correct"]:checked').value;
+
+        const res = await fetch(
+            '/api/teacher/tests/[[${testId}]]/questions',
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({
+                    text: document.getElementById("questionText").value,
+                    marks: Number(document.getElementById("marks").value),
+                    options: [
+                        document.getElementById("opt0").value,
+                        document.getElementById("opt1").value,
+                        document.getElementById("opt2").value,
+                        document.getElementById("opt3").value
+                    ],
+                    correctIndex: Number(correctIndex)
+                })
+            }
+        );
+
+        if (res.ok) {
+            // clear form for next question
+            document.getElementById("qForm").reset();
+        } else {
+            document.getElementById("msg").innerText = await res.text();
+        }
+    });
+</script>
+
+</body>
+</html>

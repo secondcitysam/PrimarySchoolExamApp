@@ -5,6 +5,7 @@ import com.school.examportal.entity.Student;
 import com.school.examportal.entity.Test;
 import com.school.examportal.entity.TestStatus;
 import com.school.examportal.entity.Topic;
+import com.school.examportal.repository.QuestionRepository;
 import com.school.examportal.repository.StudentRepository;
 import com.school.examportal.repository.TestRepository;
 import com.school.examportal.repository.TopicRepository;
@@ -21,6 +22,12 @@ public class TestServiceImpl implements TestService {
     private final TestRepository testRepo;
     private final TopicRepository topicRepo;
     private final StudentRepository studentRepo;
+    private final QuestionRepository questionRepo;
+    @Override
+    public Test findById(Long id) {
+        return testRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Test not found"));
+    }
 
     @Override
     public void create(TestCreateRequest req) {
@@ -40,14 +47,28 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void makeLive(Long testId) {
-        Test t = testRepo.findById(testId)
+
+        Test test = testRepo.findById(testId)
                 .orElseThrow(() -> new RuntimeException("Test not found"));
 
-        if (t.getStatus() != TestStatus.DRAFT) {
+        if (test.getStatus() != TestStatus.DRAFT) {
             throw new RuntimeException("Only DRAFT tests can go LIVE");
         }
-        t.setStatus(TestStatus.LIVE);
-        testRepo.save(t);
+
+        // 🔴 VALIDATION STARTS HERE
+        Integer questionMarks =
+                questionRepo.sumMarksByTestId(testId);
+
+        if (!questionMarks.equals(test.getTotalMarks())) {
+            throw new RuntimeException(
+                    "Total question marks (" + questionMarks +
+                            ") do not match test total marks (" +
+                            test.getTotalMarks() + ")"
+            );
+        }
+
+        test.setStatus(TestStatus.LIVE);
+        testRepo.save(test);
     }
 
     @Override
@@ -62,6 +83,11 @@ public class TestServiceImpl implements TestService {
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
         return student.getStandard();
+    }
+
+    @Override
+    public List<Test> findByTopic(Long topicId) {
+        return testRepo.findByTopicId(topicId);
     }
 
 }

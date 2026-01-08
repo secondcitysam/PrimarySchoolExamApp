@@ -10,6 +10,11 @@ public interface TestService {
     void makeLive(Long testId);
     List<Test> studentVisible(int standard);
 
+
     int getStudentStandard(String rollNo);
+
+    List<Test> findByTopic(Long topicId);
+    public Test findById(Long id);
+
 
 }

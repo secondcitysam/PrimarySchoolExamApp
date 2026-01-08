@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Test</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<!-- ✅ Navbar -->
+<div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
+
+<!-- ✅ Page Content -->
+<div class="page-content">
+    <div class="card" style="max-width:600px;">
+        <h2>Create Test</h2>
+        <form id="testForm">
+            <input id="title" placeholder="Test Title" required>
+
+            <input id="duration" type="number" placeholder="Duration (minutes)" required>
+
+            <input id="marks" type="number" placeholder="Total Marks" required>
+
+            <select id="standard" required>
+                <option value="">Select Class</option>
+                <option value="1">Std 1</option>
+                <option value="2">Std 2</option>
+                <option value="3">Std 3</option>
+                <option value="4">Std 4</option>
+            </select>
+
+            <button type="submit">Create Test</button>
+        </form>
+
+        <p id="msg" class="error"></p>
+    </div>
+</div>
+<script>
+    document.getElementById("testForm").addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const res = await fetch('/api/teacher/tests', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                title: document.getElementById("title").value,
+                durationMinutes: Number(document.getElementById("duration").value),
+                totalMarks: Number(document.getElementById("marks").value),
+                standard: Number(document.getElementById("standard").value),
+                topicId: [[${topicId}]]
+            })
+        });
+
+        if (res.ok) {
+            location.href = '/teacher/topics/' + [[${topicId}]] + '/tests';
+        } else {
+            document.getElementById("msg").innerText =
+                await res.text();
+        }
+    });
+</script>
+
+
+</body>
+</html>

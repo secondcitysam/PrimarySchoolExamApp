@@ -6,33 +6,41 @@
 </head>
 <body>
 
+<!-- ALSO FIX FRAGMENT USAGE -->
+<div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
+
 <div class="card">
     <h2>Add Topic</h2>
 
     <form id="f">
-        <input id="name" placeholder="Topic Name" required>
+        <input id="topicName" placeholder="Topic Name" required>
         <input id="desc" placeholder="Short Description">
-        <button>Add Topic</button>
+        <button type="submit">Add Topic</button>
     </form>
+
+    <p id="msg" style="color:red;"></p>
 </div>
 
 <script>
-    const f = document.getElementById("f");
-
-    f.onsubmit = async e => {
+    document.getElementById("f").addEventListener("submit", async e => {
         e.preventDefault();
 
-        await fetch('/api/teacher/topics', {
+        const res = await fetch('/api/teacher/topics', {
             method: 'POST',
+            credentials: 'include',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
-                name: name.value,
-                description: desc.value
+                name: document.getElementById("topicName").value,
+                description: document.getElementById("desc").value
             })
         });
 
-        location.href = '/teacher/topics';
-    };
+        if (res.ok) {
+            location.href = '/teacher/topics';
+        } else {
+            document.getElementById("msg").innerText = await res.text();
+        }
+    });
 </script>
 
 </body>

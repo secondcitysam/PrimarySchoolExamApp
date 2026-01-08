@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tests</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<!-- ✅ Navbar -->
+<div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
+
+<!-- ✅ Page Content -->
+<div class="page-content">
+    <div class="card" style="max-width:800px;">
+        <h2>Tests</h2>
+
+        <!-- CTA -->
+        <div style="text-align:center; margin-bottom:16px;">
+            <a th:href="@{/teacher/topics/{id}/tests/add(id=${topicId})}"
+               style="
+                 display:inline-block;
+                 padding:10px 18px;
+                 background:#6366f1;
+                 color:#fff;
+                 border-radius:8px;
+                 text-decoration:none;
+                 font-size:14px;
+                 font-weight:500;
+               ">
+                ➕ Create Test
+            </a>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${#lists.isEmpty(tests)}"
+             style="text-align:center; color:#6b7280; font-size:15px;">
+            No tests created yet.
+        </div>
+
+        <!-- Tests List -->
+        <div th:if="${!#lists.isEmpty(tests)}">
+            <div th:each="t : ${tests}"
+                 style="
+                   padding:14px 0;
+                   border-bottom:1px solid #f1f5f9;
+                   display:flex;
+                   justify-content:space-between;
+                   align-items:center;
+                   gap:16px;
+                 ">
+
+                <!-- Test Info -->
+                <div>
+                    <div style="font-weight:600;"
+                         th:text="${t.title}">
+                    </div>
+
+                    <div style="font-size:14px; color:#6b7280; margin-top:4px;">
+                        <span th:text="${t.status}"></span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display:flex; gap:14px; white-space:nowrap;">
+                    <a th:href="@{/teacher/tests/{id}/questions(id=${t.id})}"
+                       style="
+                         font-size:14px;
+                         color:#6366f1;
+                         text-decoration:none;
+                       ">
+                        ✍️ Add Questions
+                    </a>
+
+                    <a th:href="@{/teacher/tests/{id}/analytics(id=${t.id})}"
+                       style="
+                         font-size:14px;
+                         color:#6366f1;
+                         text-decoration:none;
+                       ">
+                        📊 Analytics
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -2,21 +2,21 @@ package com.school.examportal.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter; import lombok.Setter;
-
-@Getter @Setter
+@Getter
+@Setter
 public class TestCreateRequest {
 
     @NotBlank
     private String title;
 
-    @Min(1) @Max(4)
-    private int standard;
+    @NotNull
+    private Integer durationMinutes;
 
-    @Min(1)
-    private int durationMinutes;
+    @NotNull
+    private Integer totalMarks;
 
-    @Min(1)
-    private int totalMarks;
+    @NotNull
+    private Integer standard;
 
     @NotNull
     private Long topicId;

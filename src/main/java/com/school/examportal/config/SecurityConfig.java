@@ -23,11 +23,15 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())     // 🔴 REQUIRED
+                .httpBasic(basic -> basic.disable())   // 🔴 REQUIRED
+                .logout(logout -> logout.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/",
                                 "/login",
                                 "/signup",
                                 "/student/login",
@@ -36,6 +40,7 @@ public class SecurityConfig {
                                 "/js/**"
                         ).permitAll()
 
+                        // 🔴 THIS MUST EXIST
                         .requestMatchers("/teacher/**").hasRole("TEACHER")
                         .requestMatchers("/student/**").hasRole("STUDENT")
 

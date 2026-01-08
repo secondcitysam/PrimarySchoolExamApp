@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Topics</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<!-- ✅ Navbar -->
+<div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
+
+<!-- ✅ Page Content Wrapper -->
+<div class="page-content">
+    <div class="card" style="max-width:700px;">
+        <h2>Topics</h2>
+
+        <!-- Empty State -->
+        <div th:if="${#lists.isEmpty(topics)}"
+             style="text-align:center; color:#6b7280; font-size:15px;">
+            No topics created yet.
+        </div>
+
+        <!-- Topics List -->
+        <div th:if="${!#lists.isEmpty(topics)}">
+            <div th:each="t : ${topics}"
+                 style="
+                   padding:14px 0;
+                   border-bottom:1px solid #f1f5f9;
+                   display:flex;
+                   justify-content:space-between;
+                   align-items:flex-start;
+                   gap:12px;
+                 ">
+
+                <!-- Topic Info -->
+                <div>
+                    <div style="font-weight:600;"
+                         th:text="${t.name}">
+                    </div>
+
+                    <div style="font-size:14px; color:#6b7280; margin-top:4px;"
+                         th:text="${t.description}">
+                    </div>
+                </div>
+
+                <!-- Action -->
+                <a th:href="@{/teacher/topics/{id}/tests(id=${t.id})}"
+                   style="
+                     font-size:14px;
+                     color:#6366f1;
+                     text-decoration:none;
+                     white-space:nowrap;
+                     margin-top:2px;
+                   ">
+                    📄 View Tests
+                </a>
+
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="margin-top:24px; text-align:center;">
+            <a href="/teacher/topics/add"
+               style="
+                 display:inline-block;
+                 padding:10px 18px;
+                 background:#6366f1;
+                 color:#fff;
+                 border-radius:8px;
+                 text-decoration:none;
+                 font-size:14px;
+                 font-weight:500;
+               ">
+                ➕ Add New Topic
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

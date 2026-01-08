@@ -9,4 +9,7 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<Test, Long> {
 
     List<Test> findByStatusAndStandard(TestStatus status, int standard);
+
+    List<Test> findByTopicId(Long topicId);
+
 }

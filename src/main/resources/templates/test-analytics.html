@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Your Results</title>
+    <title>Test Analytics</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-
-<div class="card" style="max-width:700px;">
-    <h2>Your Results</h2>
+<div th:replace="fragments/teacher-navbar :: body"></div>
+<div class="card" style="max-width:800px;">
+    <h2>Test Analytics</h2>
 
     <!-- Empty State -->
-    <div th:if="${#lists.isEmpty(results)}"
+    <div th:if="${#lists.isEmpty(attempts)}"
          style="text-align:center; color:#6b7280; font-size:15px;">
-        No test results available yet.
+        No student attempts available for this test.
     </div>
 
-    <!-- Results Table -->
-    <table th:if="${!#lists.isEmpty(results)}"
+    <!-- Analytics Table -->
+    <table th:if="${!#lists.isEmpty(attempts)}"
            style="width:100%; border-collapse:collapse; margin-top:10px;">
 
         <thead>
         <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
-            <th style="padding:10px 0;">Test</th>
+            <th style="padding:10px 0;">Student</th>
             <th style="padding:10px 0;">Score</th>
             <th style="padding:10px 0;">Status</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="r : ${results}"
+        <tr th:each="a : ${attempts}"
             style="border-bottom:1px solid #f1f5f9;">
 
             <td style="padding:12px 0; font-weight:500;"
-                th:text="${r.test.title}">
+                th:text="${a.student.name}">
             </td>
 
             <td style="padding:12px 0;"
-                th:text="${r.score}">
+                th:text="${a.score}">
             </td>
 
             <td style="padding:12px 0;">
-                <span th:text="${r.submitted ? 'Submitted' : 'Pending'}"
-                      th:style="${r.submitted}
+                <span th:text="${a.submitted ? 'Submitted' : 'Not Submitted'}"
+                      th:style="${a.submitted}
                         ? 'color:#16a34a; font-weight:500;'
-                        : 'color:#ca8a04; font-weight:500;'">
+                        : 'color:#dc2626; font-weight:500;'">
                 </span>
             </td>
 
