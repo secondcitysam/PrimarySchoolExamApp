@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Question Preview</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
+
+<div class="page-content">
+    <div class="card" style="max-width:900px;">
+
+        <h2>Question Preview</h2>
+
+        <div id="viewer">
+
+            <!-- Question Index -->
+            <div id="qIndex"
+                 style="
+                   margin-bottom:12px;
+                   font-weight:600;
+                   color:#374151;
+                 ">
+            </div>
+
+            <!-- Question Text -->
+            <div id="qText"
+                 style="
+                   margin-bottom:10px;
+                   font-size:16px;
+                   font-weight:500;
+                 ">
+            </div>
+
+            <!-- Marks -->
+            <div id="qMarks"
+                 style="
+                   margin-bottom:16px;
+                   font-size:14px;
+                   color:#64748b;
+                 ">
+            </div>
+
+            <!-- Options -->
+            <ul id="options"
+                style="
+                  list-style:none;
+                  padding-left:0;
+                  margin:0;
+                ">
+            </ul>
+
+            <!-- Navigation -->
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                margin-top:22px;
+            ">
+                <button type="button" onclick="prev()">⬅ Prev</button>
+                <button type="button" onclick="next()">Next ➡</button>
+            </div>
+
+            <!-- Edit -->
+            <div style="margin-top:20px; text-align:center;">
+                <button type="button" onclick="edit()">
+                    ✏️ Edit This Question
+                </button>
+            </div>
+
+            <!-- Make Live -->
+            <div id="liveBox"
+                 style="
+                   margin-top:30px;
+                   padding-top:20px;
+                   border-top:1px solid #e5e7eb;
+                   display:none;
+                   text-align:center;
+                 ">
+
+                <button type="button"
+                        onclick="makeLive()"
+                        style="background:#16a34a;">
+                    🚀 Make Test LIVE
+                </button>
+
+                <p id="err" class="error"></p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const questions = /*[[${questions}]]*/ [];
+    const testId = [[${testId}]];
+    const locked = [[${locked}]];
+
+    let index = 0;
+
+    function render() {
+        if (!questions.length) return;
+
+        const q = questions[index];
+
+        qIndex.innerText =
+            `Question ${index + 1} of ${questions.length}`;
+
+        qText.innerText = q.text;
+        qMarks.innerText = `Marks: ${q.marks}`;
+
+        options.innerHTML = "";
+        q.options.forEach(o => {
+            options.innerHTML += `
+                <li style="
+                    padding:10px 12px;
+                    margin-bottom:8px;
+                    border-radius:8px;
+                    font-size:14px;
+                    background:${o.correct ? '#dcfce7' : '#f8fafc'};
+                    border:1px solid ${o.correct ? '#86efac' : '#e5e7eb'};
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                ">
+                    <span>${o.text}</span>
+                    ${o.correct ? '<span style="color:#16a34a; font-weight:600;">✔</span>' : ''}
+                </li>
+            `;
+        });
+
+        // Show LIVE button only on last question & if not locked
+        if (!locked && index === questions.length - 1) {
+            liveBox.style.display = "block";
+        } else {
+            liveBox.style.display = "none";
+        }
+    }
+
+    function prev() {
+        if (index > 0) {
+            index--;
+            render();
+        }
+    }
+
+    function next() {
+        if (index < questions.length - 1) {
+            index++;
+            render();
+        }
+    }
+
+    function edit() {
+        location.href =
+            `/teacher/tests/${testId}/questions`;
+    }
+
+    async function makeLive() {
+        const res = await fetch(
+            `/api/teacher/tests/${testId}/live`,
+            {
+                method: 'POST',
+                credentials: 'include'
+            }
+        );
+
+        if (res.ok) {
+            location.reload();
+        } else {
+            err.innerText = await res.text();
+        }
+    }
+
+    render();
+</script>
+
+</body>
+</html>
