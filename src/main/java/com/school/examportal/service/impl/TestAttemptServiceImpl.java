@@ -46,14 +46,16 @@ public class TestAttemptServiceImpl implements TestAttemptService {
 
         attemptRepo.save(attempt);
 
-        String key = "test:" + testId + ":student:" + student.getId();
+        String key = "test:attempt:" + attempt.getId();
+
         redis.opsForValue().set(
                 key,
-                attempt.getId(),
+                "ACTIVE",
                 Duration.ofMinutes(test.getDurationMinutes())
         );
 
         return attempt.getId();
+
     }
 
     @Override
