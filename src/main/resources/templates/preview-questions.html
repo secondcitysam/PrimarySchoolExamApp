@@ -92,7 +92,7 @@
     </div>
 </div>
 
-<script>
+<script th:inline="javascript">
     const questions = /*[[${questions}]]*/ [];
     const testId = [[${testId}]];
     const locked = [[${locked}]];
@@ -100,37 +100,38 @@
     let index = 0;
 
     function render() {
-        if (!questions.length) return;
+        if (!questions.length) {
+            document.getElementById("qText").innerText =
+                "No questions added yet";
+            return;
+        }
 
         const q = questions[index];
 
-        qIndex.innerText =
-            `Question ${index + 1} of ${questions.length}`;
+        document.getElementById("qIndex").innerText =
+            "Question " + (index + 1) + " of " + questions.length;
 
-        qText.innerText = q.text;
-        qMarks.innerText = `Marks: ${q.marks}`;
+        document.getElementById("qText").innerText = q.text;
+        document.getElementById("qMarks").innerText =
+            "Marks: " + q.marks;
 
-        options.innerHTML = "";
+        const optionsEl = document.getElementById("options");
+        optionsEl.innerHTML = "";
+
         q.options.forEach(o => {
-            options.innerHTML += `
-                <li style="
-                    padding:10px 12px;
-                    margin-bottom:8px;
-                    border-radius:8px;
-                    font-size:14px;
-                    background:${o.correct ? '#dcfce7' : '#f8fafc'};
-                    border:1px solid ${o.correct ? '#86efac' : '#e5e7eb'};
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-                ">
-                    <span>${o.text}</span>
-                    ${o.correct ? '<span style="color:#16a34a; font-weight:600;">✔</span>' : ''}
-                </li>
-            `;
+            const li = document.createElement("li");
+            li.style.padding = "8px";
+            li.style.marginBottom = "6px";
+            li.style.borderRadius = "6px";
+            li.style.background =
+                o.correct ? "#dcfce7" : "#f8fafc";
+
+            li.innerText = o.text + (o.correct ? " ✔" : "");
+            optionsEl.appendChild(li);
         });
 
-        // Show LIVE button only on last question & if not locked
+        // show LIVE button only on last question & not locked
+        const liveBox = document.getElementById("liveBox");
         if (!locked && index === questions.length - 1) {
             liveBox.style.display = "block";
         } else {
@@ -153,23 +154,24 @@
     }
 
     function edit() {
-        location.href =
-            `/teacher/tests/${testId}/questions`;
+        window.location.href =
+            "/teacher/tests/" + testId + "/questions";
     }
 
     async function makeLive() {
         const res = await fetch(
-            `/api/teacher/tests/${testId}/live`,
+            "/api/teacher/tests/" + testId + "/live",
             {
-                method: 'POST',
-                credentials: 'include'
+                method: "POST",
+                credentials: "include"
             }
         );
 
         if (res.ok) {
             location.reload();
         } else {
-            err.innerText = await res.text();
+            document.getElementById("err").innerText =
+                await res.text();
         }
     }
 
