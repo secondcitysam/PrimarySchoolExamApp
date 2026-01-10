@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<!-- Navbar -->
+<!-- ✅ Navbar -->
 <div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
 
 <div class="page-content">
@@ -14,42 +14,87 @@
 
         <h2>Question Preview</h2>
 
-        <div id="viewer">
+        <!-- ================= EMPTY STATE ================= -->
+        <div th:if="${empty}"
+             style="text-align:center; padding:30px 0;">
 
-            <!-- Question Index -->
-            <div id="qIndex"
-                 style="
-                   margin-bottom:12px;
-                   font-weight:600;
-                   color:#374151;
-                 ">
+            <p style="color:#6b7280; font-size:15px;">
+                No questions added yet.
+            </p>
+
+            <a th:href="@{/teacher/tests/{id}/questions(id=${testId})}"
+               style="
+                 display:inline-block;
+                 margin-top:14px;
+                 padding:10px 18px;
+                 background:#6366f1;
+                 color:#fff;
+                 border-radius:8px;
+                 text-decoration:none;
+                 font-size:14px;
+                 font-weight:500;
+               ">
+                ➕ Add Questions
+            </a>
+        </div>
+
+        <!-- ================= QUESTION VIEW ================= -->
+        <div th:unless="${empty}">
+
+            <!-- Index -->
+            <div style="
+                margin-bottom:12px;
+                font-weight:600;
+                color:#374151;
+            ">
+                Question
+                <span th:text="${index + 1}"></span>
+                of
+                <span th:text="${total}"></span>
             </div>
 
             <!-- Question Text -->
-            <div id="qText"
-                 style="
-                   margin-bottom:10px;
-                   font-size:16px;
-                   font-weight:500;
-                 ">
+            <div style="
+                font-size:16px;
+                font-weight:500;
+                margin-bottom:10px;
+            "
+                 th:text="${question.text}">
             </div>
 
             <!-- Marks -->
-            <div id="qMarks"
-                 style="
-                   margin-bottom:16px;
-                   font-size:14px;
-                   color:#64748b;
-                 ">
+            <div style="
+                font-size:14px;
+                color:#64748b;
+                margin-bottom:16px;
+            ">
+                Marks:
+                <span th:text="${question.marks}"></span>
             </div>
 
             <!-- Options -->
-            <ul id="options"
-                style="
-                  list-style:none;
-                  padding-left:0;
-                  margin:0;
-                ">
+            <ul style="list-style:none; padding-left:0; margin:0;">
+                <li th:each="o : ${question.options}"
+                    th:style="${o.correct}
+                        ? 'background:#dcfce7;border:1px solid #86efac;'
+                        : 'background:#f8fafc;border:1px solid #e5e7eb;'"
+                    style="
+                        padding:10px 12px;
+                        border-radius:8px;
+                        margin-bottom:8px;
+                        font-size:14px;
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                    ">
+
+                    <span th:text="${o.text}"></span>
+
+                    <span th:if="${o.correct}"
+                          style="color:#16a34a; font-weight:600;">
+                        ✔
+                    </span>
+                </li>
             </ul>
 
             <!-- Navigation -->
@@ -58,125 +103,50 @@
                 justify-content:space-between;
                 margin-top:22px;
             ">
-                <button type="button" onclick="prev()">⬅ Prev</button>
-                <button type="button" onclick="next()">Next ➡</button>
+                <a th:if="${index > 0}"
+                   th:href="@{/teacher/tests/{id}/questions/preview(id=${testId},index=${index-1})}"
+                   style="text-decoration:none; color:#6366f1;">
+                    ⬅ Prev
+                </a>
+
+                <a th:if="${index + 1 < total}"
+                   th:href="@{/teacher/tests/{id}/questions/preview(id=${testId},index=${index+1})}"
+                   style="text-decoration:none; color:#6366f1;">
+                    Next ➡
+                </a>
             </div>
 
             <!-- Edit -->
             <div style="margin-top:20px; text-align:center;">
-                <button type="button" onclick="edit()">
-                    ✏️ Edit This Question
-                </button>
+                <a th:if="${!locked}"
+                   th:href="@{/teacher/tests/{id}/questions(id=${testId})}"
+                   style="text-decoration:none; color:#6366f1;">
+                    ✏️ Edit Questions
+                </a>
             </div>
 
-            <!-- Make Live -->
-            <div id="liveBox"
+            <!-- Make LIVE -->
+            <div th:if="${!locked and index + 1 == total}"
                  style="
                    margin-top:30px;
                    padding-top:20px;
                    border-top:1px solid #e5e7eb;
-                   display:none;
                    text-align:center;
                  ">
 
-                <button type="button"
-                        onclick="makeLive()"
-                        style="background:#16a34a;">
-                    🚀 Make Test LIVE
-                </button>
+                <form th:action="@{/api/teacher/tests/{id}/live(id=${testId})}"
+                      method="post">
 
-                <p id="err" class="error"></p>
+                    <button type="submit"
+                            style="background:#16a34a;">
+                        🚀 Make Test LIVE
+                    </button>
+                </form>
             </div>
 
         </div>
     </div>
 </div>
-
-<script th:inline="javascript">
-    const questions = /*[[${questions}]]*/ [];
-    const testId = [[${testId}]];
-    const locked = [[${locked}]];
-
-    let index = 0;
-
-    function render() {
-        if (!questions.length) {
-            document.getElementById("qText").innerText =
-                "No questions added yet";
-            return;
-        }
-
-        const q = questions[index];
-
-        document.getElementById("qIndex").innerText =
-            "Question " + (index + 1) + " of " + questions.length;
-
-        document.getElementById("qText").innerText = q.text;
-        document.getElementById("qMarks").innerText =
-            "Marks: " + q.marks;
-
-        const optionsEl = document.getElementById("options");
-        optionsEl.innerHTML = "";
-
-        q.options.forEach(o => {
-            const li = document.createElement("li");
-            li.style.padding = "8px";
-            li.style.marginBottom = "6px";
-            li.style.borderRadius = "6px";
-            li.style.background =
-                o.correct ? "#dcfce7" : "#f8fafc";
-
-            li.innerText = o.text + (o.correct ? " ✔" : "");
-            optionsEl.appendChild(li);
-        });
-
-        // show LIVE button only on last question & not locked
-        const liveBox = document.getElementById("liveBox");
-        if (!locked && index === questions.length - 1) {
-            liveBox.style.display = "block";
-        } else {
-            liveBox.style.display = "none";
-        }
-    }
-
-    function prev() {
-        if (index > 0) {
-            index--;
-            render();
-        }
-    }
-
-    function next() {
-        if (index < questions.length - 1) {
-            index++;
-            render();
-        }
-    }
-
-    function edit() {
-        window.location.href =
-            "/teacher/tests/" + testId + "/questions";
-    }
-
-    async function makeLive() {
-        const res = await fetch(
-            "/api/teacher/tests/" + testId + "/live",
-            {
-                method: "POST",
-                credentials: "include"
-            }
-        );
-
-        if (res.ok) {
-            location.reload();
-        } else {
-            document.getElementById("err").innerText =
-                await res.text();
-        }
-    }
-
-    render();
-</script>
 
 </body>
 </html>

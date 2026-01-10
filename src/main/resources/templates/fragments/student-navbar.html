@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav class="navbar" th:fragment="navbar">
+
+    <!-- Left -->
+    <div class="nav-left">
+        <span class="brand">📘 Exam Portal</span>
+    </div>
+
+    <!-- Center Links -->
+    <div class="nav-links">
+        <a href="/student/home">Dashboard</a>
+        <a href="/student/tests">Available Tests</a>
+        <a href="/student/history">My Results</a>
+    </div>
+
+    <!-- Right -->
+    <div class="nav-right">
+        <form action="/api/auth/logout" method="post">
+            <button class="logout-btn">Logout</button>
+        </form>
+    </div>
+
+</nav>
+
+</body>
+</html>
