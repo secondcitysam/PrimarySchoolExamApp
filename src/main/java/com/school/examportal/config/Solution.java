@@ -29,6 +29,7 @@ class ListNode
         this.data = data;
         next = null;
     }
+    //hiiiii
 
     ListNode(int data,ListNode next)
     {
