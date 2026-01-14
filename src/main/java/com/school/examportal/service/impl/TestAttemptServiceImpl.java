@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -86,6 +87,14 @@ public class TestAttemptServiceImpl implements TestAttemptService {
             }
         }
         return score;
+    }
+    @Override
+    public List<TestAttempt> findAttemptsByStudent(String rollNo) {
+
+        Student student = studentRepo.findByRollNo(rollNo)
+                .orElseThrow();
+
+        return attemptRepo.findByStudentOrderByStartedAtDesc(student);
     }
 
 }
