@@ -8,17 +8,19 @@
 
 <div th:replace="fragments/teacher-navbar :: body"></div>
 
-<div class="card">
-    <h2>Teacher Dashboard</h2>
+<main>
+    <div class="card">
+        <h2>Teacher Dashboard</h2>
 
-    <button onclick="location.href='/teacher/students/add'">
-        ➕ Add Student
-    </button>
+        <button onclick="location.href='/teacher/students/add'">
+            ➕ Add Student
+        </button>
 
-    <form action="/api/auth/logout" method="post" style="margin-top:16px;">
-        <button style="background:#ef4444">Logout</button>
-    </form>
-</div>
+        <form action="/api/auth/logout" method="post" style="margin-top:16px;">
+            <button style="background:#ef4444">Logout</button>
+        </form>
+    </div>
 
+</main>
 </body>
 </html>

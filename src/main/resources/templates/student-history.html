@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Results</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<!-- ✅ Student Navbar -->
+<div th:replace="~{fragments/student-navbar :: navbar}"></div>
+
+<main>
+    <div class="page-content">
+        <div class="card" style="max-width:800px;">
+            <h2>My Results</h2>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(attempts)}"
+                 style="text-align:center; color:#6b7280; font-size:15px;">
+                You have not attempted any tests yet.
+            </div>
+
+            <!-- Results Table -->
+            <table th:if="${!#lists.isEmpty(attempts)}"
+                   style="
+                 width:100%;
+                 border-collapse:collapse;
+                 margin-top:10px;
+               ">
+
+                <thead>
+                <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                    <th style="padding:10px 0;">Test</th>
+                    <th style="padding:10px 0;">Score</th>
+                    <th style="padding:10px 0;">Status</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="a : ${attempts}"
+                    style="border-bottom:1px solid #f1f5f9;">
+
+                    <td style="padding:12px 0; font-weight:500;"
+                        th:text="${a.test.title}">
+                    </td>
+
+                    <td style="padding:12px 0;"
+                        th:text="${a.score}">
+                    </td>
+
+                    <td style="padding:12px 0;">
+                    <span th:text="${a.submitted ? 'Submitted' : 'In Progress'}"
+                          th:style="${a.submitted}
+                            ? 'color:#16a34a; font-weight:500;'
+                            : 'color:#ca8a04; font-weight:500;'">
+                    </span>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+</body>
+</html>

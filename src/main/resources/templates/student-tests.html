@@ -7,42 +7,44 @@
 <body>
 <div th:replace="~{fragments/student-navbar :: navbar}"></div>
 
-<div class="card">
-    <h2>Available Tests</h2>
+<main>
 
-    <!-- Empty State -->
-    <div th:if="${#lists.isEmpty(tests)}"
-         style="text-align:center; color:#6b7280; font-size:15px;">
-        No live tests available right now.
-    </div>
+    <div class="card">
+        <h2>Available Tests</h2>
 
-    <!-- Tests Table -->
-    <table th:if="${!#lists.isEmpty(tests)}"
-           style="width:100%; border-collapse:collapse; margin-top:10px;">
+        <!-- Empty State -->
+        <div th:if="${#lists.isEmpty(tests)}"
+             style="text-align:center; color:#6b7280; font-size:15px;">
+            No live tests available right now.
+        </div>
 
-        <thead>
-        <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
-            <th style="padding:10px 0;">Title</th>
-            <th style="padding:10px 0;">Duration</th>
-            <th style="padding:10px 0; text-align:right;">Action</th>
-        </tr>
-        </thead>
+        <!-- Tests Table -->
+        <table th:if="${!#lists.isEmpty(tests)}"
+               style="width:100%; border-collapse:collapse; margin-top:10px;">
 
-        <tbody>
-        <tr th:each="t : ${tests}"
-            style="border-bottom:1px solid #f1f5f9;">
+            <thead>
+            <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                <th style="padding:10px 0;">Title</th>
+                <th style="padding:10px 0;">Duration</th>
+                <th style="padding:10px 0; text-align:right;">Action</th>
+            </tr>
+            </thead>
 
-            <td style="padding:12px 0; font-weight:500;"
-                th:text="${t.title}">
-            </td>
+            <tbody>
+            <tr th:each="t : ${tests}"
+                style="border-bottom:1px solid #f1f5f9;">
 
-            <td style="padding:12px 0; color:#6b7280;"
-                th:text="${t.durationMinutes} + ' mins'">
-            </td>
+                <td style="padding:12px 0; font-weight:500;"
+                    th:text="${t.title}">
+                </td>
 
-            <td style="padding:12px 0; text-align:right;">
-                <a th:href="@{/student/tests/{id}/start(id=${t.id})}"
-                   style="
+                <td style="padding:12px 0; color:#6b7280;"
+                    th:text="${t.durationMinutes} + ' mins'">
+                </td>
+
+                <td style="padding:12px 0; text-align:right;">
+                    <a th:href="@{/student/tests/{id}/start(id=${t.id})}"
+                       style="
                      padding:8px 14px;
                      background:#6366f1;
                      color:#fff;
@@ -51,14 +53,15 @@
                      font-size:14px;
                      font-weight:500;
                    ">
-                    Start Test
-                </a>
-            </td>
-        </tr>
-        </tbody>
+                        Start Test
+                    </a>
+                </td>
+            </tr>
+            </tbody>
 
-    </table>
-</div>
+        </table>
+    </div>
 
+</main>
 </body>
 </html>

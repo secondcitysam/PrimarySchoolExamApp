@@ -9,6 +9,7 @@
 <!-- Navbar -->
 <div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
 
+<main>
 <div class="page-content">
     <div class="card" style="max-width:800px;">
 
@@ -80,7 +81,7 @@
 
     </div>
 </div>
-
+</main>
 <script>
     document.getElementById("qForm").addEventListener("submit", async e => {
         e.preventDefault();

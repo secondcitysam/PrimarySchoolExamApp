@@ -9,11 +9,12 @@
 <div th:replace="~{fragments/student-navbar :: navbar}"></div>
 
 
-<div class="card" style="max-width:700px;">
-    <h2>Test Attempt</h2>
+<main>
+    <div class="card" style="max-width:700px;">
+        <h2>Test Attempt</h2>
 
-    <!-- Timer -->
-    <div style="
+        <!-- Timer -->
+        <div style="
         display:flex;
         justify-content:space-between;
         align-items:center;
@@ -21,71 +22,72 @@
         font-size:14px;
         color:#374151;
     ">
-        <span>Answer carefully. You can navigate questions.</span>
-        <strong>⏱ Time left: <span id="time">--</span></strong>
-    </div>
+            <span>Answer carefully. You can navigate questions.</span>
+            <strong>⏱ Time left: <span id="time">--</span></strong>
+        </div>
 
-    <form id="attemptForm">
+        <form id="attemptForm">
 
-        <!-- Questions -->
-        <div th:each="q, i : ${questions}"
-             class="question"
-             th:attr="data-index=${i.index}"
-             th:style="${i.index == 0} ? 'display:block' : 'display:none'">
+            <!-- Questions -->
+            <div th:each="q, i : ${questions}"
+                 class="question"
+                 th:attr="data-index=${i.index}"
+                 th:style="${i.index == 0} ? 'display:block' : 'display:none'">
 
-            <p style="font-weight:600; margin-bottom:10px;">
-                Q<span th:text="${i.index + 1}"></span>.
-                <span th:text="${q.text}"></span>
-            </p>
+                <p style="font-weight:600; margin-bottom:10px;">
+                    Q<span th:text="${i.index + 1}"></span>.
+                    <span th:text="${q.text}"></span>
+                </p>
 
-            <div th:each="o : ${q.options}"
-                 style="
+                <div th:each="o : ${q.options}"
+                     style="
                    padding:10px;
                    border:1px solid #e5e7eb;
                    border-radius:8px;
                    margin-bottom:8px;
                    cursor:pointer;
                  ">
-                <label style="cursor:pointer;">
-                    <input type="radio"
-                           th:name="'q_' + ${q.id}"
-                           th:value="${o.id}"
-                           onchange="saveAnswer([[${q.id}]], this.value)">
-                    <span th:text="${o.text}" style="margin-left:8px;"></span>
-                </label>
+                    <label style="cursor:pointer;">
+                        <input type="radio"
+                               th:name="'q_' + ${q.id}"
+                               th:value="${o.id}"
+                               onchange="saveAnswer([[${q.id}]], this.value)">
+                        <span th:text="${o.text}" style="margin-left:8px;"></span>
+                    </label>
+                </div>
             </div>
-        </div>
 
-        <!-- Navigation -->
-        <div style="
+            <!-- Navigation -->
+            <div style="
             display:flex;
             justify-content:space-between;
             margin-top:20px;
         ">
-            <button type="button"
-                    onclick="prev()"
-                    style="background:#9ca3af;">
-                Prev
-            </button>
+                <button type="button"
+                        onclick="prev()"
+                        style="background:#9ca3af;">
+                    Prev
+                </button>
 
-            <button type="button"
-                    onclick="next()">
-                Next
-            </button>
-        </div>
+                <button type="button"
+                        onclick="next()">
+                    Next
+                </button>
+            </div>
 
-        <!-- Submit -->
-        <div style="margin-top:24px; text-align:center;">
-            <button type="button"
-                    onclick="submitTest()"
-                    style="background:#dc2626;">
-                Submit Test
-            </button>
-        </div>
+            <!-- Submit -->
+            <div style="margin-top:24px; text-align:center;">
+                <button type="button"
+                        onclick="submitTest()"
+                        style="background:#dc2626;">
+                    Submit Test
+                </button>
+            </div>
 
-    </form>
-</div>
+        </form>
+    </div>
 
+</main>
 <script>
     let index = 0;
     const questions = document.querySelectorAll(".question");

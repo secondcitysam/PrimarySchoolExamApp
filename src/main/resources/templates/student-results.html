@@ -7,52 +7,54 @@
 <body>
 <div th:replace="~{fragments/student-navbar :: navbar}"></div>
 
-<div class="card" style="max-width:700px;">
-    <h2>Your Results</h2>
+<main>
+    <div class="card" style="max-width:700px;">
+        <h2>Your Results</h2>
 
-    <!-- Empty State -->
-    <div th:if="${#lists.isEmpty(results)}"
-         style="text-align:center; color:#6b7280; font-size:15px;">
-        No test results available yet.
-    </div>
+        <!-- Empty State -->
+        <div th:if="${#lists.isEmpty(results)}"
+             style="text-align:center; color:#6b7280; font-size:15px;">
+            No test results available yet.
+        </div>
 
-    <!-- Results Table -->
-    <table th:if="${!#lists.isEmpty(results)}"
-           style="width:100%; border-collapse:collapse; margin-top:10px;">
+        <!-- Results Table -->
+        <table th:if="${!#lists.isEmpty(results)}"
+               style="width:100%; border-collapse:collapse; margin-top:10px;">
 
-        <thead>
-        <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
-            <th style="padding:10px 0;">Test</th>
-            <th style="padding:10px 0;">Score</th>
-            <th style="padding:10px 0;">Status</th>
-        </tr>
-        </thead>
+            <thead>
+            <tr style="text-align:left; border-bottom:1px solid #e5e7eb;">
+                <th style="padding:10px 0;">Test</th>
+                <th style="padding:10px 0;">Score</th>
+                <th style="padding:10px 0;">Status</th>
+            </tr>
+            </thead>
 
-        <tbody>
-        <tr th:each="r : ${results}"
-            style="border-bottom:1px solid #f1f5f9;">
+            <tbody>
+            <tr th:each="r : ${results}"
+                style="border-bottom:1px solid #f1f5f9;">
 
-            <td style="padding:12px 0; font-weight:500;"
-                th:text="${r.test.title}">
-            </td>
+                <td style="padding:12px 0; font-weight:500;"
+                    th:text="${r.test.title}">
+                </td>
 
-            <td style="padding:12px 0;"
-                th:text="${r.score}">
-            </td>
+                <td style="padding:12px 0;"
+                    th:text="${r.score}">
+                </td>
 
-            <td style="padding:12px 0;">
+                <td style="padding:12px 0;">
                 <span th:text="${r.submitted ? 'Submitted' : 'Pending'}"
                       th:style="${r.submitted}
                         ? 'color:#16a34a; font-weight:500;'
                         : 'color:#ca8a04; font-weight:500;'">
                 </span>
-            </td>
+                </td>
 
-        </tr>
-        </tbody>
+            </tr>
+            </tbody>
 
-    </table>
-</div>
+        </table>
+    </div>
 
+</main>
 </body>
 </html>

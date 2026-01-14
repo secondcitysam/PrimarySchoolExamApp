@@ -9,18 +9,20 @@
 <!-- ALSO FIX FRAGMENT USAGE -->
 <div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
 
-<div class="card">
-    <h2>Add Topic</h2>
+<main>
+    <div class="card">
+        <h2>Add Topic</h2>
 
-    <form id="f">
-        <input id="topicName" placeholder="Topic Name" required>
-        <input id="desc" placeholder="Short Description">
-        <button type="submit">Add Topic</button>
-    </form>
+        <form id="f">
+            <input id="topicName" placeholder="Topic Name" required>
+            <input id="desc" placeholder="Short Description">
+            <button type="submit">Add Topic</button>
+        </form>
 
-    <p id="msg" style="color:red;"></p>
-</div>
+        <p id="msg" style="color:red;"></p>
+    </div>
 
+</main>
 <script>
     document.getElementById("f").addEventListener("submit", async e => {
         e.preventDefault();

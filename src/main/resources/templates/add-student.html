@@ -6,6 +6,8 @@
 </head>
 <body>
 <div th:replace="fragments/teacher-navbar :: body"></div>
+
+<main>
 <div class="card">
     <h2>Add Student</h2>
 
@@ -27,7 +29,7 @@
 
     <p id="msg" class="success"></p>
 </div>
-
+</main>
 <script>
     document.getElementById("studentForm").addEventListener("submit", async e => {
         e.preventDefault();

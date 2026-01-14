@@ -9,21 +9,22 @@
 <!-- ✅ Navbar -->
 <div th:replace="~{fragments/teacher-navbar :: navbar}"></div>
 
-<div class="page-content">
-    <div class="card" style="max-width:900px;">
+<main>
+    <div class="page-content">
+        <div class="card" style="max-width:900px;">
 
-        <h2>Question Preview</h2>
+            <h2>Question Preview</h2>
 
-        <!-- ================= EMPTY STATE ================= -->
-        <div th:if="${empty}"
-             style="text-align:center; padding:30px 0;">
+            <!-- ================= EMPTY STATE ================= -->
+            <div th:if="${empty}"
+                 style="text-align:center; padding:30px 0;">
 
-            <p style="color:#6b7280; font-size:15px;">
-                No questions added yet.
-            </p>
+                <p style="color:#6b7280; font-size:15px;">
+                    No questions added yet.
+                </p>
 
-            <a th:href="@{/teacher/tests/{id}/questions(id=${testId})}"
-               style="
+                <a th:href="@{/teacher/tests/{id}/questions(id=${testId})}"
+                   style="
                  display:inline-block;
                  margin-top:14px;
                  padding:10px 18px;
@@ -34,51 +35,51 @@
                  font-size:14px;
                  font-weight:500;
                ">
-                ➕ Add Questions
-            </a>
-        </div>
+                    ➕ Add Questions
+                </a>
+            </div>
 
-        <!-- ================= QUESTION VIEW ================= -->
-        <div th:unless="${empty}">
+            <!-- ================= QUESTION VIEW ================= -->
+            <div th:unless="${empty}">
 
-            <!-- Index -->
-            <div style="
+                <!-- Index -->
+                <div style="
                 margin-bottom:12px;
                 font-weight:600;
                 color:#374151;
             ">
-                Question
-                <span th:text="${index + 1}"></span>
-                of
-                <span th:text="${total}"></span>
-            </div>
+                    Question
+                    <span th:text="${index + 1}"></span>
+                    of
+                    <span th:text="${total}"></span>
+                </div>
 
-            <!-- Question Text -->
-            <div style="
+                <!-- Question Text -->
+                <div style="
                 font-size:16px;
                 font-weight:500;
                 margin-bottom:10px;
             "
-                 th:text="${question.text}">
-            </div>
+                     th:text="${question.text}">
+                </div>
 
-            <!-- Marks -->
-            <div style="
+                <!-- Marks -->
+                <div style="
                 font-size:14px;
                 color:#64748b;
                 margin-bottom:16px;
             ">
-                Marks:
-                <span th:text="${question.marks}"></span>
-            </div>
+                    Marks:
+                    <span th:text="${question.marks}"></span>
+                </div>
 
-            <!-- Options -->
-            <ul style="list-style:none; padding-left:0; margin:0;">
-                <li th:each="o : ${question.options}"
-                    th:style="${o.correct}
+                <!-- Options -->
+                <ul style="list-style:none; padding-left:0; margin:0;">
+                    <li th:each="o : ${question.options}"
+                        th:style="${o.correct}
                         ? 'background:#dcfce7;border:1px solid #86efac;'
                         : 'background:#f8fafc;border:1px solid #e5e7eb;'"
-                    style="
+                        style="
                         padding:10px 12px;
                         border-radius:8px;
                         margin-bottom:8px;
@@ -88,65 +89,66 @@
                         align-items:center;
                     ">
 
-                    <span th:text="${o.text}"></span>
+                        <span th:text="${o.text}"></span>
 
-                    <span th:if="${o.correct}"
-                          style="color:#16a34a; font-weight:600;">
+                        <span th:if="${o.correct}"
+                              style="color:#16a34a; font-weight:600;">
                         ✔
                     </span>
-                </li>
-            </ul>
+                    </li>
+                </ul>
 
-            <!-- Navigation -->
-            <div style="
+                <!-- Navigation -->
+                <div style="
                 display:flex;
                 justify-content:space-between;
                 margin-top:22px;
             ">
-                <a th:if="${index > 0}"
-                   th:href="@{/teacher/tests/{id}/questions/preview(id=${testId},index=${index-1})}"
-                   style="text-decoration:none; color:#6366f1;">
-                    ⬅ Prev
-                </a>
+                    <a th:if="${index > 0}"
+                       th:href="@{/teacher/tests/{id}/questions/preview(id=${testId},index=${index-1})}"
+                       style="text-decoration:none; color:#6366f1;">
+                        ⬅ Prev
+                    </a>
 
-                <a th:if="${index + 1 < total}"
-                   th:href="@{/teacher/tests/{id}/questions/preview(id=${testId},index=${index+1})}"
-                   style="text-decoration:none; color:#6366f1;">
-                    Next ➡
-                </a>
-            </div>
+                    <a th:if="${index + 1 < total}"
+                       th:href="@{/teacher/tests/{id}/questions/preview(id=${testId},index=${index+1})}"
+                       style="text-decoration:none; color:#6366f1;">
+                        Next ➡
+                    </a>
+                </div>
 
-            <!-- Edit -->
-            <div style="margin-top:20px; text-align:center;">
-                <a th:if="${!locked}"
-                   th:href="@{/teacher/tests/{id}/questions(id=${testId})}"
-                   style="text-decoration:none; color:#6366f1;">
-                    ✏️ Edit Questions
-                </a>
-            </div>
+                <!-- Edit -->
+                <div style="margin-top:20px; text-align:center;">
+                    <a th:if="${!locked}"
+                       th:href="@{/teacher/tests/{id}/questions(id=${testId})}"
+                       style="text-decoration:none; color:#6366f1;">
+                        ✏️ Edit Questions
+                    </a>
+                </div>
 
-            <!-- Make LIVE -->
-            <div th:if="${!locked and index + 1 == total}"
-                 style="
+                <!-- Make LIVE -->
+                <div th:if="${!locked and index + 1 == total}"
+                     style="
                    margin-top:30px;
                    padding-top:20px;
                    border-top:1px solid #e5e7eb;
                    text-align:center;
                  ">
 
-                <form th:action="@{/api/teacher/tests/{id}/live(id=${testId})}"
-                      method="post">
+                    <form th:action="@{/api/teacher/tests/{id}/live(id=${testId})}"
+                          method="post">
 
-                    <button type="submit"
-                            style="background:#16a34a;">
-                        🚀 Make Test LIVE
-                    </button>
-                </form>
+                        <button type="submit"
+                                style="background:#16a34a;">
+                            🚀 Make Test LIVE
+                        </button>
+                    </form>
+                </div>
+
             </div>
-
         </div>
     </div>
-</div>
 
+</main>
 </body>
 </html>
